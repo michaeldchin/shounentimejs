@@ -1,3 +1,5 @@
+const { incrementPerson } = require('../models/people.js');
+
 module.exports = {
 	name: 'interactionCreate',
 	async execute(interaction) {
@@ -10,6 +12,7 @@ module.exports = {
 
 		try {
 			await command.execute(interaction);
+			await incrementPerson(interaction.user.id, interaction.user.tag);
 		}
 		catch (error) {
 			console.error(error);
