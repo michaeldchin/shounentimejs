@@ -11,21 +11,22 @@ const People = sequelize.define('people', {
         primaryKey: true,
         unique: true,
     },
-    person_name: Sequelize.STRING,
+    name: Sequelize.STRING,
     count: {
         type: Sequelize.INTEGER,
         defaultValue: 0,
     },
 });
 
+// Creates Table if it doesn't exists.
 People.sync();
 
-const incrementPerson = async (_id, _name) => {
-    let person = await People.findOne({ where: { id: _id } });
+const incrementPerson = async (id, name) => {
+    let person = await People.findOne({ where: { id } });
     if (!person) {
         person = await People.create({
-            id: _id,
-            person_name: _name,
+            id,
+            name,
         });
     }
     person.increment('count');
