@@ -31,6 +31,12 @@ const incrementPerson = async (_id, _name) => {
     person.increment('count');
 };
 
+const getTopPeople = async () => {
+    const topPeople = await People.findAll({ order: [['count', 'DESC']] });
+    return topPeople;
+};
+
 module.exports = {
     incrementPerson,
+    getTopPeople,
 };
