@@ -14,18 +14,17 @@ const setUpCommands = () => {
         .map(command => command.toJSON());
 };
 
-
 rest.put(Routes.applicationCommands(clientId), { body: setUpCommands() })
 	.then((data) => console.log(`Successfully registered ${data.length} application commands.`))
 	.catch(console.error);
 
-// // delete one command
+// delete one command
 // const commandId = '';
 // rest.delete(Routes.applicationCommand(clientId, commandId))
 //     .then(() => console.log('Successfully deleted application command'))
 // 	.catch(console.error);
 
-// // delete all global commands
+// delete all global commands
 // rest.put(Routes.applicationCommands(clientId), { body: [] })
 // 	.then(() => console.log('Successfully deleted all application commands.'))
 // 	.catch(console.error);

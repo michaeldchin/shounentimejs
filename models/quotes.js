@@ -18,19 +18,23 @@ const Quotes = sequelize.define('quotes', {
     },
     author: Sequelize.STRING,
     guildId: Sequelize.STRING,
+    addedBy: Sequelize.STRING,
 });
 
 // Creates Table if it doesn't exists.
 Quotes.sync();
 
-const addQuote = async (quote, author, guildId) => {
+const addQuote = async (quote, author, guildId, userId) => {
     return await Quotes.create({
-        quote, author, guildId,
+        quote,
+        author,
+        guildId,
+        addedBy: userId,
     });
 };
 
 const getQuote = async (params) => {
-    return await Quotes.findOne({ where: params});
+    return await Quotes.findOne({ where: params });
 };
 
 const getRandomQuote = async () => {
