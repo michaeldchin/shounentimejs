@@ -20,7 +20,7 @@ module.exports = {
 
 		const result = await addQuote(quote, author, interaction.guildId, interaction.user.id);
 
-		const response = `quote added! ${JSON.stringify(result)}`;
+		const response = `quote added! ${JSON.stringify(result, null, 2)}`;
 		const embed = new EmbedBuilder().setColor(0x007777)
 			.setDescription(response);
 

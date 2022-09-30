@@ -1,18 +1,52 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const { getRandomImage } = require('../models/images.js');
-const { getRandomQuote } = require('../models/quotes.js');
+const { getQuoteById, getRandomQuote, getRandomServerQuote } = require('../models/quotes.js');
+const { getImageById, getRandomImage, getRandomServerImage } = require('../models/images.js');
 
 const _formatQuote = (quote, author) => {
 	return `« ${quote} » ${author}`;
 };
 
+const _getQuote = async (quoteId, guildId) => {
+	if (quoteId === 'custom') {
+		return await getRandomServerQuote(guildId);
+	}
+	else if (quoteId) {
+		return await getQuoteById(quoteId);
+	}
+	else if (!quoteId) {
+		return await getRandomQuote(guildId);
+	}
+	throw new Error('Unexpected input: ', quoteId, guildId);
+};
+
+const _getImage = async (imageId, guildId) => {
+	if (imageId === 'custom') {
+		return await getRandomServerImage(guildId);
+	}
+	else if (imageId) {
+		return await getImageById(imageId);
+	}
+	else if (!imageId) {
+		return await getRandomImage(guildId);
+	}
+	throw new Error('Unexpected input: ', imageId, guildId);
+};
+
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('shounenimage')
-		.setDescription('the best command'),
+		.setDescription('the best command')
+		.addStringOption(option => {
+			return option.setName('quoteid')
+				.setDescription('quoteId or "custom" for server specific quotes');
+		})
+		.addStringOption(option => {
+			return option.setName('imageid')
+				.setDescription('imageId or "custom" for server specific images');
+		}),
 	async execute(interaction) {
-		const quote = await getRandomQuote();
-		const image = await getRandomImage();
+		const quote = await _getQuote(interaction?.option?.quoteid, interaction.guildId);
+		const image = await _getImage(interaction?.option?.imageid, interaction.guildId);
 
 		const embed = new EmbedBuilder().setColor(0x777777);
 

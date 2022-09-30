@@ -1,4 +1,4 @@
-const { Sequelize } = require('sequelize');
+const { Sequelize, Op } = require('sequelize');
 
 const sequelize = new Sequelize('shounentime', 'michael', 'password', {
 	host: 'localhost',
@@ -12,7 +12,10 @@ const Images = sequelize.define('images', {
         allowNull: false,
         autoIncrement: true,
     },
-    url: Sequelize.STRING(2000),
+    url: {
+        type: Sequelize.STRING(500),
+        unique: true,
+    },
     tag: Sequelize.STRING,
     guildId: Sequelize.STRING,
     addedBy: Sequelize.STRING,
@@ -30,18 +33,31 @@ const addImage = async (url, tag, guildId, userId) => {
     });
 };
 
-const getImage = async (params) => {
-    return await Images.findOne({ where: { params } });
+const getImageById = async (id) => {
+    return await Images.findOne({ where: { id } });
 };
 
-const getRandomImage = async () => {
+const getRandomImage = async (guildId) => {
     return await Images.findOne({
+        where: {
+            guildId: {
+                [Op.or]: [ guildId, null],
+            },
+        },
+        order: sequelize.random(),
+    });
+};
+
+const getRandomServerImage = async (guildId) => {
+    return await Images.findOne({
+        where: { guildId },
         order: sequelize.random(),
     });
 };
 
 module.exports = {
     addImage,
-    getImage,
+    getImageById,
     getRandomImage,
+    getRandomServerImage,
 };

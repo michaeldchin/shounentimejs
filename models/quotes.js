@@ -1,4 +1,4 @@
-const { Sequelize } = require('sequelize');
+const { Sequelize, Op } = require('sequelize');
 
 const sequelize = new Sequelize('shounentime', 'michael', 'password', {
 	host: 'localhost',
@@ -13,8 +13,9 @@ const Quotes = sequelize.define('quotes', {
         autoIncrement: true,
     },
     quote: {
-        type: Sequelize.STRING(1000),
+        type: Sequelize.STRING(500),
         allowNull: false,
+        unique: true,
     },
     author: Sequelize.STRING,
     guildId: Sequelize.STRING,
@@ -33,18 +34,31 @@ const addQuote = async (quote, author, guildId, userId) => {
     });
 };
 
-const getQuote = async (params) => {
-    return await Quotes.findOne({ where: params });
+const getQuoteById = async (id) => {
+    return await Quotes.findOne({ where: { id } });
 };
 
-const getRandomQuote = async () => {
+const getRandomQuote = async (guildId) => {
     return await Quotes.findOne({
+        where: {
+            guildId: {
+                [Op.or]: [ guildId, null],
+            },
+        },
+        order: sequelize.random(),
+    });
+};
+
+const getRandomServerQuote = async (guildId) => {
+    return await Quotes.findOne({
+        where: { guildId },
         order: sequelize.random(),
     });
 };
 
 module.exports = {
     addQuote,
-    getQuote,
+    getQuoteById,
     getRandomQuote,
+    getRandomServerQuote,
 };

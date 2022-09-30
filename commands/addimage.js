@@ -43,7 +43,7 @@ module.exports = {
 		}
 		const result = await addImage(url, tag, interaction.guildId, interaction.user.id);
 
-		const response = `quote added! ${JSON.stringify(result)}`;
+		const response = `image added! ${JSON.stringify(result, null, 2)}`;
 		const embed = new EmbedBuilder().setColor(0x007777)
 			.setDescription(response);
 
