@@ -17,6 +17,16 @@ const Quotes = sequelize.define('quotes', {
     author: Sequelize.STRING,
     guildId: Sequelize.STRING,
     addedBy: Sequelize.STRING,
+    createdAt: {
+        type: Sequelize.DATE,
+        defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
+        allowNull: false,
+    },
+    updatedAt: {
+        type: Sequelize.DATE,
+        defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
+        allowNull: false,
+    },
 });
 
 // Creates Table if it doesn't exists.

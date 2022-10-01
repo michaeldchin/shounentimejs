@@ -13,6 +13,16 @@ const People = sequelize.define('people', {
         type: Sequelize.INTEGER,
         defaultValue: 0,
     },
+    createdAt: {
+        type: Sequelize.DATE,
+        defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
+        allowNull: false,
+    },
+    updatedAt: {
+        type: Sequelize.DATE,
+        defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
+        allowNull: false,
+    },
 });
 
 // Creates Table if it doesn't exists.
