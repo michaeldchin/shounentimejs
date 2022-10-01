@@ -1,9 +1,6 @@
 const { Sequelize } = require('sequelize');
 
-const sequelize = new Sequelize('shounentime', 'michael', 'password', {
-	host: 'localhost',
-	dialect: 'mysql',
-});
+const { sequelize } = require('./sqlClient');
 
 const People = sequelize.define('people', {
     id: {

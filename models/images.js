@@ -1,9 +1,6 @@
 const { Sequelize, Op } = require('sequelize');
 
-const sequelize = new Sequelize('shounentime', 'michael', 'password', {
-	host: 'localhost',
-	dialect: 'mysql',
-});
+const { sequelize } = require('./sqlClient');
 
 const Images = sequelize.define('images', {
     id: {

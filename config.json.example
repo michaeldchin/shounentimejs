@@ -1,4 +1,13 @@
 {
     "clientId": "application-id-from-discord-dev-portal",
-    "token": "bot-token"
+    "token": "bot-token",
+    "db": {
+        "database": "shounentime",
+        "username": "user",
+        "password": "password",
+        "options": {
+            "host": "localhost",
+            "dialect": "mysql"
+        }
+    }
 }
