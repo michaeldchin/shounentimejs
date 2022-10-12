@@ -3,7 +3,7 @@ const { getQuoteById, getRandomQuote, getRandomServerQuote } = require('../model
 const { getImageById, getRandomImage, getRandomServerImage } = require('../models/images.js');
 
 const _formatQuote = (quote, author) => {
-	return `« ${quote} » ${author}`;
+	return `« ${quote} » ${author ? author : ''}`;
 };
 
 const _getQuote = async (quoteId, guildId) => {
@@ -45,8 +45,8 @@ module.exports = {
 				.setDescription('imageId or "custom" for server specific images');
 		}),
 	async execute(interaction) {
-		const quote = await _getQuote(interaction?.option?.quoteid, interaction.guildId);
-		const image = await _getImage(interaction?.option?.imageid, interaction.guildId);
+		const quote = await _getQuote(interaction.options.getString('quoteid'), interaction.guildId);
+		const image = await _getImage(interaction.options.getString('imageid'), interaction.guildId);
 
 		const embed = new EmbedBuilder().setColor(0x777777);
 
