@@ -23,4 +23,5 @@ https://nginx.org/en/docs/install.html
 configure `/etc/nginx/nginx.conf`
 configure `config.json`
 
+`sudo npm install -g @angular/cli`
 run the backend `node shounen-backend/index.js`
