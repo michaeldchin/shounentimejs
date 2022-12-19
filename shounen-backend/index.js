@@ -4,11 +4,13 @@ const bodyParser = require('body-parser');
 const mysql = require('mysql');
 const events = require('./src/events');
 
+const { db } = require('../config.json');
+
 const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'michael',
-  password : 'password',
-  database : 'shounentime',
+  host: db.options.host,
+  user: db.username,
+  password: db.password,
+  database: db.database,
 });
 
 connection.connect();

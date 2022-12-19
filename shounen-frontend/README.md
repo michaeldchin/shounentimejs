@@ -14,14 +14,13 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
-## Running unit tests
+## Deployed to server using nginx
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+https://nginx.org/en/docs/install.html
 
-## Running end-to-end tests
+`sudo service nginx start`
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+configure `/etc/nginx/nginx.conf`
+configure `config.json`
 
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+run the backend `node shounen-backend/index.js`

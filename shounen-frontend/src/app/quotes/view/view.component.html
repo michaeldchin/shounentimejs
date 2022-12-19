@@ -1,7 +1,17 @@
 
-<table>
+<table border="1">
+  <tr>
+    <td>id</td>
+    <td>quote</td>
+    <td>author</td>
+    <td>guildId</td>
+    <td>updatedAt</td>
+  </tr>
   <tr *ngFor="let q of quotes">
     <td>{{ q.id }}</td>
     <td>{{ q.quote }}</td>
+    <td>{{ q.author }}</td>
+    <td>{{ q.guildId }}</td>
+    <td>{{ q.updatedAt }}</td>
   </tr>
 </table>
