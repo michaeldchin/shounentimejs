@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Quotes } from '../quotes';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-view',
@@ -20,6 +21,6 @@ export class ViewComponent {
   }
 
   getQuotes() {
-    return this.http.get<Array<Quotes>>('http://localhost:8080/quotes')
+    return this.http.get<Array<Quotes>>(`${environment.backendApi}/quotes`)
   }
 }

@@ -2,7 +2,6 @@ const express = require('express');
 
 function createRouter(db) {
   const router = express.Router();
-  const owner = '';
 
   router.get('/quotes', (req, res, next) => {
     db.query(
