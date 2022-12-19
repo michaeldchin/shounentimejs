@@ -3,7 +3,7 @@ const express = require('express');
 function createRouter(db) {
   const router = express.Router();
 
-  router.get('/quotes', (req, res, next) => {
+  router.get('/api/quotes', (req, res, next) => {
     db.query(
       'SELECT * FROM quotes',
       [],
