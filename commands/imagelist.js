@@ -3,13 +3,13 @@ const { frontendHost } = require('../config.json');
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('quotelist')
-		.setDescription('Link to list of quotes & IDs'),
+		.setName('imagelist')
+		.setDescription('Link to list of images & IDs'),
 	async execute(interaction) {
-		const url = new URL('/quotes', frontendHost)
+		const url = new URL('/images', frontendHost)
 		const embed = new EmbedBuilder()
 			.setColor(0x0099FF)
-			.setDescription(`Go to ${url} for a full list of quotes`);
+			.setDescription(`Go to ${url} for a full list of images`);
 		await interaction.reply({ embeds: [ embed ] });
 	},
 };

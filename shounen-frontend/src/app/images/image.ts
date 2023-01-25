@@ -1,7 +1,7 @@
-export interface Quotes {
+export interface Image {
     id: number;
-    quote: string;
-    author: string;
+    url: string;
+    tag: string;
     guildId: string;
     addedBy: string;
     createdAt: Date;

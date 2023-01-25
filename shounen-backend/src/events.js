@@ -18,6 +18,21 @@ function createRouter(db) {
     );
   });
 
+  router.get('/api/images', (req, res, next) => {
+    db.query(
+      'SELECT * FROM images',
+      [],
+      (error, result) => {
+        if (error) {
+          console.error(error);
+          res.status(500).json({ status: 'error' });
+        } else {
+          res.status(200).json(result);
+        }
+      },
+    );
+  });
+
   return router;
 }
 

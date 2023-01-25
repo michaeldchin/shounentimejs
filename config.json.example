@@ -1,7 +1,7 @@
 {
     "clientId": "application-id-from-discord-dev-portal",
     "token": "bot-token",
-    "host": "http://localhost:8080/",
+    "frontendHost": "http://localhost:4200/",
     "db": {
         "database": "shounentime",
         "username": "user",

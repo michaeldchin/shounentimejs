@@ -1,0 +1,17 @@
+
+<table border="1">
+    <tr>
+      <td>id</td>
+      <td>image</td>
+      <td>tag</td>
+      <td>guildId</td>
+      <td>updatedAt</td>
+    </tr>
+    <tr *ngFor="let i of images">
+      <td><p class="id">{{ i.id }}</p></td>
+      <td><img class="thumbnail" src="{{i.url}}"></td>
+      <td>{{ i.tag }}</td>
+      <td>{{ i.guildId }}</td>
+      <td>{{ i.updatedAt }}</td>
+    </tr>
+  </table>

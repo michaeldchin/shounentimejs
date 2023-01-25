@@ -4,14 +4,16 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ViewComponent } from './quotes/view/view.component';
+import { QuotesComponent } from './quotes/quotes.component';
 import { HomeComponent } from './home/home.component';
+import { ImagesComponent } from './images/images.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ViewComponent,
-    HomeComponent
+    QuotesComponent,
+    HomeComponent,
+    ImagesComponent
   ],
   imports: [
     BrowserModule,
