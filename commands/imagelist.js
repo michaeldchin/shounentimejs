@@ -6,10 +6,10 @@ module.exports = {
 		.setName('imagelist')
 		.setDescription('Link to list of images & IDs'),
 	async execute(interaction) {
-		const url = new URL('/images', frontendHost)
+		const url = new URL('/images?server=' + interaction.guildId, frontendHost)
 		const embed = new EmbedBuilder()
 			.setColor(0x0099FF)
-			.setDescription(`Go to ${url} for a full list of images`);
+			.setDescription(`Go to ${url} for a list of server specific images`);
 		await interaction.reply({ embeds: [ embed ] });
 	},
 };

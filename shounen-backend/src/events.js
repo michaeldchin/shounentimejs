@@ -19,8 +19,12 @@ function createRouter(db) {
   });
 
   router.get('/api/images', (req, res, next) => {
+    const server = req.query.server
+    const query = server !== 'undefined'
+      ? 'SELECT * FROM images WHERE guildId = ' + server
+      : 'SELECT * FROM images'
     db.query(
-      'SELECT * FROM images',
+      query,
       [],
       (error, result) => {
         if (error) {
