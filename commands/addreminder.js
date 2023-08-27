@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { addReminder } = require('../models/reminders.js');
+const chrono = require('chrono-node');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -12,17 +13,28 @@ module.exports = {
 		})
 		.addStringOption(option => {
 			return option.setName('remindertime')
-				.setDescription('time when you want to be reminder');
+				.setDescription('time when you want to be reminder')
+                .setRequired(true);
 		}),
 	async execute(interaction) {
 		const reminder = interaction.options.getString('reminder');
-        // Do some fancy string to date stuff
-		const remindertime = interaction.options.getString('remindertime'); 
+		const remindertime = chrono.parseDate(interaction.options.getString('remindertime'));
+        let response
+        if (remindertime === null) {
+            response = `Invalid reminder time could not be parsed: ${reminder}`
+        }
+        else if (remindertime < Date.now()) {
+            response = `Invalid reminder time is in the past: ${remindertime}`
+        }
+        else {
+            await addReminder(reminder, 
+                interaction.channelId, 
+                remindertime,
+                interaction.user.id,
+                interaction.guildId);
+		    response = `Set a reminder to "${reminder}" at ${remindertime}`;
+        }
 
-		const result = await addReminder(reminder, interaction.channelId, Date.now(),
-            interaction.user.id,interaction.guildId);
-
-		const response = `reminder added! ${JSON.stringify(result, null, 2)}`;
 		const embed = new EmbedBuilder().setColor(0x007777)
 			.setDescription(response);
 

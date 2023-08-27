@@ -21,6 +21,11 @@ const Reminders = sequelize.define('reminders', {
         type: Sequelize.DATE,
         allowNull: false
     },
+    reminderSent: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: sequelize.literal(false),
+        allowNull: false
+    },
     discordId: Sequelize.STRING,
     guildId: Sequelize.STRING,
     createdAt: {
@@ -52,16 +57,16 @@ const addReminder = async (reminder, channelId, reminderDate, discordId, guildId
 //     return await Quotes.findOne({ where: { id } });
 // };
 
-// const getRandomQuote = async (guildId) => {
-//     return await Quotes.findOne({
-//         where: {
-//             guildId: {
-//                 [Op.or]: [ guildId, null],
-//             },
-//         },
-//         order: sequelize.random(),
-//     });
-// };
+const listReminders = async (discordId, date) => {
+    return await Reminders.findAll({
+        where: { 
+            discordId,
+            reminderDate: {
+                [Op.gt]: date
+            }
+        }
+    });
+};
 
 // const getRandomServerQuote = async (guildId) => {
 //     return await Quotes.findOne({
@@ -71,5 +76,6 @@ const addReminder = async (reminder, channelId, reminderDate, discordId, guildId
 // };
 
 module.exports = {
-    addReminder
+    addReminder,
+    listReminders
 };
