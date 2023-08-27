@@ -11,20 +11,20 @@ const Reminders = sequelize.define('reminders', {
     },
     reminder: {
         type: Sequelize.STRING(500),
-        allowNull: false
+        allowNull: false,
     },
     channelId: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
     },
     reminderDate: {
         type: Sequelize.DATE,
-        allowNull: false
+        allowNull: false,
     },
     reminderSent: {
         type: Sequelize.BOOLEAN,
         defaultValue: sequelize.literal(false),
-        allowNull: false
+        allowNull: false,
     },
     discordId: Sequelize.STRING,
     guildId: Sequelize.STRING,
@@ -49,33 +49,44 @@ const addReminder = async (reminder, channelId, reminderDate, discordId, guildId
         channelId,
         reminderDate,
         discordId,
-        guildId
+        guildId,
     });
 };
-
-// const getQuoteById = async (id) => {
-//     return await Quotes.findOne({ where: { id } });
-// };
 
 const listReminders = async (discordId, date) => {
     return await Reminders.findAll({
-        where: { 
+        where: {
             discordId,
             reminderDate: {
-                [Op.gt]: date
-            }
-        }
+                [Op.gt]: date,
+            },
+        },
     });
 };
 
-// const getRandomServerQuote = async (guildId) => {
-//     return await Quotes.findOne({
-//         where: { guildId },
-//         order: sequelize.random(),
-//     });
-// };
+const getDueReminders = async () => {
+    return await Reminders.findAll({
+        where: {
+            reminderDate: {
+                [Op.lt]: Date.now(),
+            },
+            reminderSent: {
+                [Op.eq]: false,
+            },
+        },
+    });
+};
+
+const setSentFlag = async (id) => {
+    return await Reminders.update(
+        { reminderSent: true },
+        { where: { id } },
+    );
+};
 
 module.exports = {
     addReminder,
-    listReminders
+    listReminders,
+    getDueReminders,
+    setSentFlag,
 };
