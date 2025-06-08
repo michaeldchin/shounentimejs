@@ -11,7 +11,7 @@
   "dependencies": {
     "chrono-node": "^2.6.5",
     "discord.js": "^14.13.0",
-    "mysql2": "^2.3.3",
+    "mysql2": "^3.14.1",
     "sequelize": "^6.23.2"
   },
   "devDependencies": {

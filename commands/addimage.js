@@ -31,17 +31,23 @@ module.exports = {
 		.addStringOption(option => {
 			return option.setName('tag')
 				.setDescription('Name/tag to describe the picture');
+		})
+		.addBooleanOption(option => {
+			return option.setName('global')
+				.setDescription('Server only or public to all servers. Defaults to server only');
 		}),
 	async execute(interaction) {
 		const url = interaction.options.getString('url');
 		const tag = interaction.options.getString('tag');
+		const globalFlag = interaction.options.getBoolean('global');
+		const guildId = globalFlag ? null : interaction.guildId;
 
 		if (!urlIsValid(url)) {
 			const errorReply = 'Invalid url. Make sure it is a link that ends with (png,jpg,jpeg,webp)';
 			await interaction.reply({ content: errorReply, ephemeral: true });
 			return;
 		}
-		const result = await addImage(url, tag, interaction.guildId, interaction.user.id);
+		const result = await addImage(url, tag, guildId, interaction.user.id);
 
 		const response = `image added! ${JSON.stringify(result, null, 2)}`;
 		const embed = new EmbedBuilder().setColor(0x007777)
