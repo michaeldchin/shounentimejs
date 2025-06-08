@@ -19,7 +19,7 @@ jobs:
         host: ${{ secrets.SERVER_HOST }}
         username: ${{ secrets.SERVER_USER }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
-        port: ${{ secrets.SSH_HOST_PORT }}
+        port: ${{ secrets.SSH_PORT }}
         script: |
           set -e
           cd /home/debian/src/shounentimejs || git clone git@github.com:michaeldchin/shounentimejs.git /home/debian/src/shounentimejs
