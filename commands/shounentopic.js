@@ -1,21 +1,21 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { getPodcastTopicById, getRandomPodcastTopic, getRandomServerPodcastTopic } = require('../models/podcasttopic.js');
 
-const _formatQuote = (quote, author) => {
-	return `« ${quote} » ${author ? author : ''}`;
+const _formatTopic = (topic) => {
+	return topic;
 };
 
-const _getQuote = async (quoteId, guildId) => {
-	if (quoteId === 'custom') {
+const _getPodcastTopic = async (topicId, guildId) => {
+	if (topicId === 'custom') {
 		return await getRandomServerPodcastTopic(guildId);
 	}
-	else if (quoteId) {
-		return await getPodcastTopicById(quoteId);
+	else if (topicId) {
+		return await getPodcastTopicById(topicId);
 	}
-	else if (!quoteId) {
+	else if (!topicId) {
 		return await getRandomPodcastTopic(guildId);
 	}
-	throw new Error('Unexpected input: ', quoteId, guildId);
+	throw new Error('Unexpected input: ', topicId, guildId);
 };
 
 module.exports = {
@@ -23,23 +23,19 @@ module.exports = {
 		.setName('shounentopic')
 		.setDescription('give me something to talk about')
 		.addStringOption(option => {
-			return option.setName('topicId')
+			return option.setName('topicid')
 				.setDescription('topicId or "custom" for server specific podcast topics');
-		})
-		.addStringOption(option => {
-			return option.setName('imageid')
-				.setDescription('imageId or "custom" for server specific images');
 		}),
 	async execute(interaction) {
-		const quote = await _getQuote(interaction.options.getString('quoteid'), interaction.guildId);
+		const topic = await _getPodcastTopic(interaction.options.getString('topicId'), interaction.guildId);
 
 		const embed = new EmbedBuilder().setColor(0x777777);
 
-		if (quote) {
-			embed.setDescription(_formatQuote(quote.quote, quote.author));
+		if (topic) {
+			embed.setDescription(_formatTopic(topic.topic));
 		}
 		else {
-			embed.setDescription('Invalid quote: ' + quote);
+			embed.setDescription('Invalid topic: ' + topic);
 		}
 
 		await interaction.reply({ embeds: [ embed ] });
