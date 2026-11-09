@@ -27,6 +27,7 @@ jobs:
           git pull origin master
           npm ci --production
           sudo systemctl restart shounentime
+          sudo systemctl restart shounen-backend
 
   deploy-frontend:
     runs-on: ubuntu-latest
