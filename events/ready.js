@@ -12,11 +12,31 @@ const triggerReminders = async (client) => {
 	}
 };
 
+const registerCommands = async (client) => {
+	const commandData = client.commands.map(command => command.data.toJSON());
+
+	if (commandData.length === 0) {
+		console.warn('No commands loaded, skipping command registration.');
+		return;
+	}
+
+	try {
+		await client.application.commands.set(commandData);
+		console.log(`Registered ${commandData.length} application commands.`);
+	}
+	catch (error) {
+		console.error('Failed to register application commands:', error);
+	}
+};
+
 module.exports = {
 	name: 'ready',
 	once: true,
-	execute(client) {
+	async execute(client) {
 		console.log(`Ready! Logged in as ${client.user.tag}`);
+
+		await registerCommands(client);
+
 		client.user.setActivity('' + new Date());
 
 		// Polls DB for reminders
