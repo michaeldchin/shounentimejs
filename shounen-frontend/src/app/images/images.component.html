@@ -9,7 +9,7 @@
     </tr>
     <tr *ngFor="let i of images">
       <td><p class="id">{{ i.id }}</p></td>
-      <td><img class="thumbnail" src="{{i.url}}"></td>
+      <td><img class="thumbnail" src="{{ i.filename ? '/images/' + i.filename : i.url }}"></td>
       <td>{{ i.tag }}</td>
       <td>{{ i.guildId }}</td>
       <td>{{ i.updatedAt }}</td>

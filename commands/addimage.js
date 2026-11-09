@@ -1,23 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { addImage } = require('../models/images.js');
-const path = require('path');
-
-const urlIsValid = (url) => {
-	if (!url.startsWith('https://')) return false;
-
-	const ending = path.extname(url).toLowerCase();
-	const validExtensions = [
-		'.jpg',
-		'.jpeg',
-		'.png',
-		'.webp',
-		'.gif',
-	];
-	if (ending && validExtensions.includes(ending)) {
-		return true;
-	}
-	return false;
-};
+const { saveImage } = require('../imageStore.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -25,7 +8,7 @@ module.exports = {
 		.setDescription('Add linked image to database.')
 		.addStringOption(option => {
 			return option.setName('url')
-				.setDescription('Link to image (png,jpg,jpeg,webp)')
+				.setDescription('Link to image (png,jpg,jpeg,webp,gif)')
 				.setRequired(true);
 		})
 		.addStringOption(option => {
@@ -42,14 +25,23 @@ module.exports = {
 		const globalFlag = interaction.options.getBoolean('global');
 		const guildId = globalFlag ? null : interaction.guildId;
 
-		if (!urlIsValid(url)) {
-			const errorReply = 'Invalid url. Make sure it is a link that ends with (png,jpg,jpeg,webp)';
-			await interaction.reply({ content: errorReply, ephemeral: true });
+		if (!url.startsWith('https://')) {
+			await interaction.reply({ content: 'Invalid url. Make sure it is an https link to an image.', ephemeral: true });
 			return;
 		}
-		const result = await addImage(url, tag, guildId, interaction.user.id);
 
-		const response = `image added! ${JSON.stringify(result, null, 2)}`;
+		let filename;
+		try {
+			filename = await saveImage(url);
+		}
+		catch (error) {
+			await interaction.reply({ content: `Couldn't save image: ${error.message}`, ephemeral: true });
+			return;
+		}
+
+		const result = await addImage(url, tag, guildId, interaction.user.id, filename);
+
+		const response = `image added and saved locally! ${JSON.stringify(result, null, 2)}`;
 		const embed = new EmbedBuilder().setColor(0x007777)
 			.setDescription(response);
 
