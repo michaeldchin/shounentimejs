@@ -13,6 +13,7 @@ const Images = sequelize.define('images', {
         type: Sequelize.STRING(500),
         unique: true,
     },
+    filename: Sequelize.STRING(255),
     tag: Sequelize.STRING,
     guildId: Sequelize.STRING,
     addedBy: Sequelize.STRING,
@@ -28,12 +29,28 @@ const Images = sequelize.define('images', {
     },
 });
 
-// Creates Table if it doesn't exists.
-Images.sync();
+const ensureFilenameColumn = async () => {
+    try {
+        const [columns] = await sequelize.query(
+            "SELECT 1 FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'images' AND COLUMN_NAME = 'filename'",
+        );
+        if (columns.length === 0) {
+            await sequelize.query('ALTER TABLE images ADD COLUMN filename VARCHAR(255) NULL');
+            console.log('Migration: added images.filename column.');
+        }
+    }
+    catch (error) {
+        console.error('Migration failed (images.filename):', error.message);
+    }
+};
 
-const addImage = async (url, tag, guildId, userId) => {
+// Creates Table if it doesn't exists.
+Images.sync().then(ensureFilenameColumn);
+
+const addImage = async (url, tag, guildId, userId, filename) => {
     return await Images.create({
         url,
+        filename,
         tag,
         guildId,
         addedBy: userId,
@@ -62,9 +79,19 @@ const getRandomServerImage = async (guildId) => {
     });
 };
 
+const getImagesWithoutFilename = async (limit = 1000) => {
+    return await Images.findAll({ where: { filename: null }, limit });
+};
+
+const setImageFilename = async (id, filename) => {
+    return await Images.update({ filename }, { where: { id } });
+};
+
 module.exports = {
     addImage,
     getImageById,
     getRandomImage,
     getRandomServerImage,
+    getImagesWithoutFilename,
+    setImageFilename,
 };

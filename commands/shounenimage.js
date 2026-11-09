@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { getQuoteById, getRandomQuote, getRandomServerQuote } = require('../models/quotes.js');
 const { getImageById, getRandomImage, getRandomServerImage } = require('../models/images.js');
+const { getImagePublicUrl, imageFileExists } = require('../imageStore.js');
 
 const _formatQuote = (quote, author) => {
 	return `« ${quote} » ${author ? author : ''}`;
@@ -58,7 +59,10 @@ module.exports = {
 		}
 
 		if (image) {
-			embed.setImage(image.url);
+			const embedUrl = image.filename && imageFileExists(image.filename)
+				? getImagePublicUrl(image.filename)
+				: image.url;
+			embed.setImage(embedUrl);
 		}
 		else {
 			embed.setImage('https://i.kym-cdn.com/photos/images/original/002/113/379/aee.jpeg');
