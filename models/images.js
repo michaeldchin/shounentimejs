@@ -87,11 +87,36 @@ const setImageFilename = async (id, filename) => {
     return await Images.update({ filename }, { where: { id } });
 };
 
+const getDiscordImagesWithoutFilename = async (limit = null) => {
+    const options = {
+        where: {
+            filename: null,
+            url: {
+                [Op.or]: [
+                    { [Op.like]: 'https://cdn.discordapp.com/%' },
+                    { [Op.like]: 'https://media.discordapp.net/%' },
+                ],
+            },
+        },
+        order: [['id', 'ASC']],
+    };
+    if (limit) {
+        options.limit = limit;
+    }
+    return await Images.findAll(options);
+};
+
+const updateImageUrl = async (id, url) => {
+    return await Images.update({ url }, { where: { id } });
+};
+
 module.exports = {
     addImage,
     getImageById,
     getRandomImage,
     getRandomServerImage,
     getImagesWithoutFilename,
+    getDiscordImagesWithoutFilename,
     setImageFilename,
+    updateImageUrl,
 };
