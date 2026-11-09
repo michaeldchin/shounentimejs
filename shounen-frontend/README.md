@@ -1,27 +1,46 @@
 # ShounenFrontend
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.0.2.
+A lean frontend for the shonen bot, rebuilt with **Vite + React + TypeScript** (Angular removed).
 
-## Development server
+## Development
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+```sh
+npm install
+npm run dev
+```
 
-## Code scaffolding
+The dev server proxies `/api` to `http://localhost:8080`, so run the backend locally:
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+```sh
+node ../shounen-backend/index.js
+```
 
 ## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+```sh
+npm run build
+```
 
-## Deployed to server using nginx
+Output goes to `dist/shounen-frontend/` (same path Angular used, so the existing nginx
+config keeps working).
 
-https://nginx.org/en/docs/install.html
+## Deploy
 
-`sudo service nginx start`
+The GitHub Actions workflow (`.github/workflows/main.yml`) builds the frontend on the
+runner and copies it to the server on every push to `master` — no need to build locally.
 
-configure `/etc/nginx/nginx.conf`
-configure `config.json`
+For a manual deploy, run:
 
-`sudo npm install -g @angular/cli`
-run the backend `node shounen-backend/index.js`
+```sh
+DEPLOY_HOST=your-server-host npm run deploy
+```
+
+This builds locally, then `scp`s `dist/shounen-frontend/*` to
+`/home/debian/src/shounentimejs/shounen-frontend/dist/shounen-frontend/` on the server.
+`DEPLOY_USER` defaults to `debian` and can be overridden the same way.
+
+## Routes
+
+- `/` — home
+- `/quotes` — quotes (uses hash routing: `/#/quotes`)
+- `/images` — images; optionally filtered by server via `?server=<guildId>`
