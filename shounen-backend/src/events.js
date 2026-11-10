@@ -4,9 +4,15 @@ function createRouter(db) {
   const router = express.Router();
 
   router.get('/api/quotes', (req, res, next) => {
+    const server = req.query.server;
+    const filterByServer =
+      typeof server === 'string' && server.length > 0 && server !== 'undefined';
+    const query = filterByServer
+      ? 'SELECT * FROM quotes WHERE guildId = ?'
+      : 'SELECT * FROM quotes WHERE guildId IS NULL';
     db.query(
-      'SELECT * FROM quotes',
-      [],
+      query,
+      filterByServer ? [server] : [],
       (error, result) => {
         if (error) {
           console.error(error);

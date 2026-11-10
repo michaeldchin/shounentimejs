@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { fetchQuotes, Quote } from '../api';
 import { EmptyState, ErrorState, Loader } from '../components/Feedback';
 import { formatDate } from '../format';
@@ -6,6 +7,9 @@ import { formatDate } from '../format';
 type Status = 'loading' | 'ready' | 'error';
 
 export default function Quotes() {
+  const [searchParams] = useSearchParams();
+  const server = searchParams.get('server') ?? undefined;
+
   const [quotes, setQuotes] = useState<Quote[]>([]);
   const [status, setStatus] = useState<Status>('loading');
   const [error, setError] = useState('');
@@ -15,7 +19,7 @@ export default function Quotes() {
     setStatus('loading');
     setError('');
     try {
-      setQuotes(await fetchQuotes());
+      setQuotes(await fetchQuotes(server));
       setStatus('ready');
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
@@ -25,7 +29,7 @@ export default function Quotes() {
 
   useEffect(() => {
     void load();
-  }, []);
+  }, [server]);
 
   const visible = useMemo(() => {
     const term = filter.trim().toLowerCase();
@@ -41,8 +45,10 @@ export default function Quotes() {
         <h2>Quotes</h2>
         <p className="page-sub">
           {status === 'ready'
-            ? `${visible.length} of ${quotes.length} quote${quotes.length === 1 ? '' : 's'}`
-            : 'Collected wisdom from the server'}
+            ? `${visible.length} of ${quotes.length} quote${quotes.length === 1 ? '' : 's'}${
+                server ? ` · server ${server}` : ''
+              }`
+            : 'Collected wisdom'}
         </p>
         <input
           className="search"
@@ -59,7 +65,13 @@ export default function Quotes() {
       {status === 'ready' && visible.length === 0 && (
         <EmptyState
           title={filter ? 'No quotes match that filter' : 'No quotes yet'}
-          body={filter ? 'Try a different search.' : 'Add one in Discord with /addquote.'}
+          body={
+            filter
+              ? 'Try a different search.'
+              : server
+                ? 'Add one in Discord with /addquote.'
+                : 'Add a global quote in Discord with /addquote global:true.'
+          }
         />
       )}
       {status === 'ready' && visible.length > 0 && (

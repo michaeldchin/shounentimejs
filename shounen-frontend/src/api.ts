@@ -29,7 +29,10 @@ async function request<T>(path: string): Promise<T> {
   return (await response.json()) as T;
 }
 
-export const fetchQuotes = () => request<Quote[]>('/quotes');
+export const fetchQuotes = (server?: string) => {
+  const query = server ? `?server=${encodeURIComponent(server)}` : '';
+  return request<Quote[]>(`/quotes${query}`);
+};
 
 export const fetchImages = (server?: string) => {
   const query = server ? `?server=${encodeURIComponent(server)}` : '';
